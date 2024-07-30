@@ -15,12 +15,12 @@ import top.guoziyang.mydb.common.Error;
  */
 public class LockTable {
     
-    private Map<Long, List<Long>> x2u;  // 某个XID已经获得的资源的UID列表
-    private Map<Long, Long> u2x;        // UID被某个XID持有
-    private Map<Long, List<Long>> wait; // 正在等待UID的XID列表
-    private Map<Long, Lock> waitLock;   // 正在等待资源的XID的锁
-    private Map<Long, Long> waitU;      // XID正在等待的UID
-    private Lock lock;
+    private final Map<Long, List<Long>> x2u;  // 某个XID已经获得的资源的UID列表
+    private final Map<Long, Long> u2x;        // UID被某个XID持有
+    private final Map<Long, List<Long>> wait; // 正在等待UID的XID列表
+    private final Map<Long, Lock> waitLock;   // 正在等待资源的XID的锁
+    private final Map<Long, Long> waitU;      // XID正在等待的UID
+    private final Lock lock;
 
     public LockTable() {
         x2u = new HashMap<>();
@@ -67,7 +67,7 @@ public class LockTable {
         try {
             List<Long> l = x2u.get(xid);
             if(l != null) {
-                while(l.size() > 0) {
+                while(!l.isEmpty()) {
                     Long uid = l.remove(0);
                     selectNewXID(uid);
                 }
@@ -86,13 +86,11 @@ public class LockTable {
         u2x.remove(uid);
         List<Long> l = wait.get(uid);
         if(l == null) return;
-        assert l.size() > 0;
+        assert !l.isEmpty();
 
-        while(l.size() > 0) {
+        while(!l.isEmpty()) {
             long xid = l.remove(0);
-            if(!waitLock.containsKey(xid)) {
-                continue;
-            } else {
+            if(waitLock.containsKey(xid)) {
                 u2x.put(uid, xid);
                 Lock lo = waitLock.remove(xid);
                 waitU.remove(xid);
@@ -101,7 +99,7 @@ public class LockTable {
             }
         }
 
-        if(l.size() == 0) wait.remove(uid);
+        if(l.isEmpty()) wait.remove(uid);
     }
 
     private Map<Long, Integer> xidStamp;
@@ -151,7 +149,7 @@ public class LockTable {
                 break;
             }
         }
-        if(l.size() == 0) {
+        if(l.isEmpty()) {
             listMap.remove(uid0);
         }
     }
@@ -166,10 +164,8 @@ public class LockTable {
     private boolean isInList(Map<Long, List<Long>> listMap, long uid0, long uid1) {
         List<Long> l = listMap.get(uid0);
         if(l == null) return false;
-        Iterator<Long> i = l.iterator();
-        while(i.hasNext()) {
-            long e = i.next();
-            if(e == uid1) {
+        for (long e : l) {
+            if (e == uid1) {
                 return true;
             }
         }

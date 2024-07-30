@@ -23,13 +23,13 @@ public interface TableManager {
     byte[] update(long xid, Update update) throws Exception;
     byte[] delete(long xid, Delete delete) throws Exception;
 
-    public static TableManager create(String path, VersionManager vm, DataManager dm) {
+    static TableManager create(String path, VersionManager vm, DataManager dm) {
         Booter booter = Booter.create(path);
         booter.update(Parser.long2Byte(0));
         return new TableManagerImpl(vm, dm, booter);
     }
 
-    public static TableManager open(String path, VersionManager vm, DataManager dm) {
+    static TableManager open(String path, VersionManager vm, DataManager dm) {
         Booter booter = Booter.open(path);
         return new TableManagerImpl(vm, dm, booter);
     }

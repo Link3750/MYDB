@@ -237,7 +237,7 @@ public class Recover {
             }
             PageX.recoverInsert(pg, li.raw, li.offset);
         } finally {
-            pg.release();
+            if (pg != null) pg.release();
         }
     }
 }

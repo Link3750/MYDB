@@ -76,8 +76,8 @@ public class Node {
         return Parser.parseLong(Arrays.copyOfRange(raw.raw, offset, offset+8));
     }
 
-    static void copyRawFromKth(SubArray from, SubArray to, int kth) {
-        int offset = from.start+NODE_HEADER_SIZE+kth*(8*2);
+    static void copyRawFromKth(SubArray from, SubArray to) {
+        int offset = from.start+NODE_HEADER_SIZE+ Node.BALANCE_NUMBER *(8*2);
         System.arraycopy(from.raw, offset, to.raw, to.start+NODE_HEADER_SIZE, from.end-offset);
     }
 
@@ -137,7 +137,7 @@ public class Node {
         }
     }
 
-    class SearchNextRes {
+    static class SearchNextRes {
         long uid;
         long siblingUid;
     }
@@ -164,7 +164,7 @@ public class Node {
         }
     }
 
-    class LeafSearchRangeRes {
+    static class LeafSearchRangeRes {
         List<Long> uids;
         long siblingUid;
     }
@@ -204,11 +204,11 @@ public class Node {
         }
     }
 
-    class InsertAndSplitRes {
+    static class InsertAndSplitRes {
         long siblingUid, newSon, newKey;
     }
 
-    public InsertAndSplitRes insertAndSplit(long uid, long key) throws Exception {
+    InsertAndSplitRes insertAndSplit(long uid, long key) throws Exception {
         boolean success = false;
         Exception err = null;
         InsertAndSplitRes res = new InsertAndSplitRes();
@@ -275,7 +275,7 @@ public class Node {
         return BALANCE_NUMBER*2 == getRawNoKeys(raw);
     }
 
-    class SplitRes {
+    static class SplitRes {
         long newSon, newKey;
     }
 
@@ -284,7 +284,7 @@ public class Node {
         setRawIsLeaf(nodeRaw, getRawIfLeaf(raw));
         setRawNoKeys(nodeRaw, BALANCE_NUMBER);
         setRawSibling(nodeRaw, getRawSibling(raw));
-        copyRawFromKth(raw, nodeRaw, BALANCE_NUMBER);
+        copyRawFromKth(raw, nodeRaw);
         long son = tree.dm.insert(TransactionManagerImpl.SUPER_XID, nodeRaw.raw);
         setRawNoKeys(raw, BALANCE_NUMBER);
         setRawSibling(raw, son);

@@ -20,13 +20,13 @@ public class DataItemImpl implements DataItem {
     static final int OF_SIZE = 1;
     static final int OF_DATA = 3;
 
-    private SubArray raw;
-    private byte[] oldRaw;
-    private Lock rLock;
-    private Lock wLock;
-    private DataManagerImpl dm;
-    private long uid;
-    private Page pg;
+    private final SubArray raw;
+    private final byte[] oldRaw;
+    private final Lock rLock;
+    private final Lock wLock;
+    private final DataManagerImpl dm;
+    private final long uid;
+    private final Page pg;
 
     public DataItemImpl(SubArray raw, byte[] oldRaw, Page pg, long uid, DataManagerImpl dm) {
         this.raw = raw;

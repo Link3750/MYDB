@@ -11,9 +11,9 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 public class Transporter {
-    private Socket socket;
-    private BufferedReader reader;
-    private BufferedWriter writer;
+    private final Socket socket;
+    private final BufferedReader reader;
+    private final BufferedWriter writer;
 
     public Transporter(Socket socket) throws IOException {
         this.socket = socket;

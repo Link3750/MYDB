@@ -19,7 +19,7 @@ public interface TransactionManager {
     boolean isAborted(long xid);
     void close();
 
-    public static TransactionManagerImpl create(String path) {
+    static TransactionManagerImpl create(String path) {
         File f = new File(path+TransactionManagerImpl.XID_SUFFIX);
         try {
             if(!f.createNewFile()) {
@@ -53,7 +53,7 @@ public interface TransactionManager {
         return new TransactionManagerImpl(raf, fc);
     }
 
-    public static TransactionManagerImpl open(String path) {
+    static TransactionManagerImpl open(String path) {
         File f = new File(path+TransactionManagerImpl.XID_SUFFIX);
         if(!f.exists()) {
             Panic.panic(Error.FileNotExistsException);

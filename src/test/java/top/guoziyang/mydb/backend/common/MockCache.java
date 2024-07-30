@@ -7,7 +7,7 @@ public class MockCache extends AbstractCache<Long> {
     }
 
     @Override
-    protected Long getForCache(long key) throws Exception {
+    protected Long getForCache(long key) {
         return key;
     }
 

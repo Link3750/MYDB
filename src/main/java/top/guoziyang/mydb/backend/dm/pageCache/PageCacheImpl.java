@@ -19,11 +19,11 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache {
     private static final int MEM_MIN_LIM = 10;
     public static final String DB_SUFFIX = ".db";
 
-    private RandomAccessFile file;
-    private FileChannel fc;
-    private Lock fileLock;
+    private final RandomAccessFile file;
+    private final FileChannel fc;
+    private final Lock fileLock;
 
-    private AtomicInteger pageNumbers;
+    private final AtomicInteger pageNumbers;
 
     PageCacheImpl(RandomAccessFile file, FileChannel fileChannel, int maxResource) {
         super(maxResource);
@@ -50,14 +50,14 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache {
     }
 
     public Page getPage(int pgno) throws Exception {
-        return get((long)pgno);
+        return get(pgno);
     }
 
     /**
      * 根据pageNumber从数据库文件中读取页数据，并包裹成Page
      */
     @Override
-    protected Page getForCache(long key) throws Exception {
+    protected Page getForCache(long key) {
         int pgno = (int)key;
         long offset = PageCacheImpl.pageOffset(pgno);
 
@@ -132,7 +132,7 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache {
     }
 
     private static long pageOffset(int pgno) {
-        return (pgno-1) * PAGE_SIZE;
+        return (long) (pgno - 1) * PAGE_SIZE;
     }
     
 }

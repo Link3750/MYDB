@@ -22,7 +22,7 @@ public interface PageCache {
     int getPageNumber();
     void flushPage(Page pg);
 
-    public static PageCacheImpl create(String path, long memory) {
+    static PageCacheImpl create(String path, long memory) {
         File f = new File(path+PageCacheImpl.DB_SUFFIX);
         try {
             if(!f.createNewFile()) {
@@ -46,7 +46,7 @@ public interface PageCache {
         return new PageCacheImpl(raf, fc, (int)memory/PAGE_SIZE);
     }
 
-    public static PageCacheImpl open(String path, long memory) {
+    static PageCacheImpl open(String path, long memory) {
         File f = new File(path+PageCacheImpl.DB_SUFFIX);
         if(!f.exists()) {
             Panic.panic(Error.FileNotExistsException);

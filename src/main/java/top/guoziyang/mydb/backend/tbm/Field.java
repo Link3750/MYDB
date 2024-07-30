@@ -21,7 +21,7 @@ import top.guoziyang.mydb.common.Error;
  */
 public class Field {
     long uid;
-    private Table tb;
+    private final Table tb;
     String fieldName;
     String fieldType;
     private long index;
@@ -109,15 +109,12 @@ public class Field {
     }
 
     public Object string2Value(String str) {
-        switch(fieldType) {
-            case "int32":
-                return Integer.parseInt(str);
-            case "int64":
-                return Long.parseLong(str);
-            case "string":
-                return str;
-        }
-        return null;
+        return switch (fieldType) {
+            case "int32" -> Integer.parseInt(str);
+            case "int64" -> Long.parseLong(str);
+            case "string" -> str;
+            default -> null;
+        };
     }
 
     public long value2Uid(Object key) {
@@ -127,8 +124,7 @@ public class Field {
                 uid = Parser.str2Uid((String)key);
                 break;
             case "int32":
-                int uint = (int)key;
-                return (long)uint;
+                return (int)key;
             case "int64":
                 uid = (long)key;
                 break;
@@ -137,27 +133,20 @@ public class Field {
     }
 
     public byte[] value2Raw(Object v) {
-        byte[] raw = null;
-        switch(fieldType) {
-            case "int32":
-                raw = Parser.int2Byte((int)v);
-                break;
-            case "int64":
-                raw = Parser.long2Byte((long)v);
-                break;
-            case "string":
-                raw = Parser.string2Byte((String)v);
-                break;
-        }
-        return raw;
+        return switch (fieldType) {
+            case "int32" -> Parser.int2Byte((int) v);
+            case "int64" -> Parser.long2Byte((long) v);
+            case "string" -> Parser.string2Byte((String) v);
+            default -> null;
+        };
     }
 
-    class ParseValueRes {
+    static class ParseValueRes {
         Object v;
         int shift;
     }
 
-    public ParseValueRes parserValue(byte[] raw) {
+    ParseValueRes parserValue(byte[] raw) {
         ParseValueRes res = new ParseValueRes();
         switch(fieldType) {
             case "int32":
@@ -178,30 +167,22 @@ public class Field {
     }
 
     public String printValue(Object v) {
-        String str = null;
-        switch(fieldType) {
-            case "int32":
-                str = String.valueOf((int)v);
-                break;
-            case "int64":
-                str = String.valueOf((long)v);
-                break;
-            case "string":
-                str = (String)v;
-                break;
-        }
-        return str;
+        return switch (fieldType) {
+            case "int32" -> String.valueOf((int) v);
+            case "int64" -> String.valueOf((long) v);
+            case "string" -> (String) v;
+            default -> null;
+        };
     }
 
     @Override
     public String toString() {
-        return new StringBuilder("(")
-            .append(fieldName)
-            .append(", ")
-            .append(fieldType)
-            .append(index!=0?", Index":", NoIndex")
-            .append(")")
-            .toString();
+        return "(" +
+                fieldName +
+                ", " +
+                fieldType +
+                (index != 0 ? ", Index" : ", NoIndex") +
+                ")";
     }
 
     public FieldCalRes calExp(SingleExpression exp) throws Exception {

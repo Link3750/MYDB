@@ -22,7 +22,7 @@ public class Client {
     public void close() {
         try {
             rt.close();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

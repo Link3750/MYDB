@@ -110,13 +110,12 @@ public class BPlusTree {
     public void insert(long key, long uid) throws Exception {
         long rootUid = rootUid();
         InsertRes res = insert(rootUid, uid, key);
-        assert res != null;
         if(res.newNode != 0) {
             updateRootUid(rootUid, res.newNode, res.newKey);
         }
     }
 
-    class InsertRes {
+    static class InsertRes {
         long newNode, newKey;
     }
 

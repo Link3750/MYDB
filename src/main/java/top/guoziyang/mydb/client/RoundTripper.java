@@ -4,7 +4,7 @@ import top.guoziyang.mydb.transport.Package;
 import top.guoziyang.mydb.transport.Packager;
 
 public class RoundTripper {
-    private Packager packager;
+    private final Packager packager;
 
     public RoundTripper(Packager packager) {
         this.packager = packager;

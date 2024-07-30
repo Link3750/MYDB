@@ -15,7 +15,7 @@ import top.guoziyang.mydb.transport.Packager;
 import top.guoziyang.mydb.transport.Transporter;
 
 public class Server {
-    private int port;
+    private final int port;
     TableManager tbm;
 
     public Server(int port, TableManager tbm) {
@@ -24,7 +24,7 @@ public class Server {
     }
 
     public void start() {
-        ServerSocket ss = null;
+        ServerSocket ss;
         try {
             ss = new ServerSocket(port);
         } catch (IOException e) {
@@ -50,8 +50,8 @@ public class Server {
 }
 
 class HandleSocket implements Runnable {
-    private Socket socket;
-    private TableManager tbm;
+    private final Socket socket;
+    private final TableManager tbm;
 
     public HandleSocket(Socket socket, TableManager tbm) {
         this.socket = socket;
@@ -78,7 +78,7 @@ class HandleSocket implements Runnable {
         }
         Executor exe = new Executor(tbm);
         while(true) {
-            Package pkg = null;
+            Package pkg;
             try {
                 pkg = packager.receive();
             } catch(Exception e) {

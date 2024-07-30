@@ -40,7 +40,7 @@ public class PageIndex {
             int number = spaceSize / THRESHOLD;
             if(number < INTERVALS_NO) number ++;
             while(number <= INTERVALS_NO) {
-                if(lists[number].size() == 0) {
+                if(lists[number].isEmpty()) {
                     number ++;
                     continue;
                 }

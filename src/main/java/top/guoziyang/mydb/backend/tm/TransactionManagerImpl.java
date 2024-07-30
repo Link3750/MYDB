@@ -28,10 +28,10 @@ public class TransactionManagerImpl implements TransactionManager {
 
     static final String XID_SUFFIX = ".xid";
     
-    private RandomAccessFile file;
-    private FileChannel fc;
+    private final RandomAccessFile file;
+    private final FileChannel fc;
     private long xidCounter;
-    private Lock counterLock;
+    private final Lock counterLock;
 
     TransactionManagerImpl(RandomAccessFile raf, FileChannel fc) {
         this.file = raf;

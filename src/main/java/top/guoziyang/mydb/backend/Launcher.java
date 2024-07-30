@@ -61,7 +61,7 @@ public class Launcher {
     }
 
     private static long parseMem(String memStr) {
-        if(memStr == null || "".equals(memStr)) {
+        if(memStr == null || memStr.isEmpty()) {
             return DEFALUT_MEM;
         }
         if(memStr.length() < 2) {

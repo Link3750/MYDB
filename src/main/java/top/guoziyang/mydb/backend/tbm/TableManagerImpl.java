@@ -21,10 +21,10 @@ import top.guoziyang.mydb.common.Error;
 public class TableManagerImpl implements TableManager {
     VersionManager vm;
     DataManager dm;
-    private Booter booter;
-    private Map<String, Table> tableCache;
-    private Map<Long, List<Table>> xidTableCache;
-    private Lock lock;
+    private final Booter booter;
+    private final Map<String, Table> tableCache;
+    private final Map<Long, List<Table>> xidTableCache;
+    private final Lock lock;
     
     TableManagerImpl(VersionManager vm, DataManager dm, Booter booter) {
         this.vm = vm;

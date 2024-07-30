@@ -3,7 +3,7 @@ package top.guoziyang.mydb.backend.parser;
 import top.guoziyang.mydb.common.Error;
 
 public class Tokenizer {
-    private byte[] stat;
+    private final byte[] stat;
     private int pos;
     private String currentToken;
     private boolean flushToken;
@@ -21,7 +21,7 @@ public class Tokenizer {
             throw err;
         }
         if(flushToken) {
-            String token = null;
+            String token;
             try {
                 token = next();
             } catch(Exception e) {

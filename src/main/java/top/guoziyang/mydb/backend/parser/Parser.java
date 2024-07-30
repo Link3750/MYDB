@@ -26,40 +26,19 @@ public class Parser {
         Object stat = null;
         Exception statErr = null;
         try {
-            switch(token) {
-                case "begin":
-                    stat = parseBegin(tokenizer);
-                    break;
-                case "commit":
-                    stat = parseCommit(tokenizer);
-                    break;
-                case "abort":
-                    stat = parseAbort(tokenizer);
-                    break;
-                case "create":
-                    stat = parseCreate(tokenizer);
-                    break;
-                case "drop":
-                    stat = parseDrop(tokenizer);
-                    break;
-                case "select":
-                    stat = parseSelect(tokenizer);
-                    break;
-                case "insert":
-                    stat = parseInsert(tokenizer);
-                    break;
-                case "delete":
-                    stat = parseDelete(tokenizer);
-                    break;
-                case "update":
-                    stat = parseUpdate(tokenizer);
-                    break;
-                case "show":
-                    stat = parseShow(tokenizer);
-                    break;
-                default:
-                    throw Error.InvalidCommandException;
-            }
+            stat = switch (token) {
+                case "begin" -> parseBegin(tokenizer);
+                case "commit" -> parseCommit(tokenizer);
+                case "abort" -> parseAbort(tokenizer);
+                case "create" -> parseCreate(tokenizer);
+                case "drop" -> parseDrop(tokenizer);
+                case "select" -> parseSelect(tokenizer);
+                case "insert" -> parseInsert(tokenizer);
+                case "delete" -> parseDelete(tokenizer);
+                case "update" -> parseUpdate(tokenizer);
+                case "show" -> parseShow(tokenizer);
+                default -> throw Error.InvalidCommandException;
+            };
         } catch(Exception e) {
             statErr = e;
         }
@@ -167,7 +146,7 @@ public class Parser {
                 values.add(value);
             }
         }
-        insert.values = values.toArray(new String[values.size()]);
+        insert.values = values.toArray(new String[0]);
 
         return insert;
     }
@@ -195,7 +174,7 @@ public class Parser {
                 }
             }
         }
-        read.fields = fields.toArray(new String[fields.size()]);
+        read.fields = fields.toArray(new String[0]);
 
         if(!"from".equals(tokenizer.peek())) {
             throw Error.InvalidCommandException;
@@ -227,8 +206,7 @@ public class Parser {
         }
         tokenizer.pop();
 
-        SingleExpression exp1 = parseSingleExp(tokenizer);
-        where.singleExp1 = exp1;
+        where.singleExp1 = parseSingleExp(tokenizer);
 
         String logicOp = tokenizer.peek();
         if("".equals(logicOp)) {
@@ -241,8 +219,7 @@ public class Parser {
         where.logicOp = logicOp;
         tokenizer.pop();
 
-        SingleExpression exp2 = parseSingleExp(tokenizer);
-        where.singleExp2 = exp2;
+        where.singleExp2 = parseSingleExp(tokenizer);
 
         if(!"".equals(tokenizer.peek())) {
             throw Error.InvalidCommandException;
@@ -316,6 +293,7 @@ public class Parser {
 
         List<String> fNames = new ArrayList<>();
         List<String> fTypes = new ArrayList<>();
+        label:
         while(true) {
             tokenizer.pop();
             String field = tokenizer.peek();
@@ -337,18 +315,20 @@ public class Parser {
             tokenizer.pop();
             
             String next = tokenizer.peek();
-            if(",".equals(next)) {
-                continue;
-            } else if("".equals(next)) {
-                throw Error.TableNoIndexException;
-            } else if("(".equals(next)) {
-                break;
-            } else {
-                throw Error.InvalidCommandException;
+            switch (next) {
+                case ",":
+                    break;
+                case "":
+                    throw Error.TableNoIndexException;
+                case "(":
+                    break label;
+                case null:
+                default:
+                    throw Error.InvalidCommandException;
             }
         }
-        create.fieldName = fNames.toArray(new String[fNames.size()]);
-        create.fieldType = fTypes.toArray(new String[fTypes.size()]);
+        create.fieldName = fNames.toArray(new String[0]);
+        create.fieldType = fTypes.toArray(new String[0]);
 
         tokenizer.pop();
         if(!"index".equals(tokenizer.peek())) {
@@ -368,7 +348,7 @@ public class Parser {
                 indexes.add(field);
             }
         }
-        create.index = indexes.toArray(new String[indexes.size()]);
+        create.index = indexes.toArray(new String[0]);
         tokenizer.pop();
 
         if(!"".equals(tokenizer.peek())) {
