@@ -49,19 +49,18 @@ public class PageCacheTest {
     private AtomicInteger noPages1;
     @Test
     public void testPageCacheMultiSimple() throws Exception {
-        pc1 = PageCache.create("/D:\\workspace\\MYDB\\target\\test\\pcacher_simple_test1", PageCache.PAGE_SIZE * 50);
+        pc1 = PageCache.create("D:\\workspace\\MYDB\\target\\test\\pcacher_simple_test1", PageCache.PAGE_SIZE * 50);
         cdl1 = new CountDownLatch(200);
         noPages1 = new AtomicInteger(0);
         for(int i = 0; i < 200; i ++) {
-            int id = i;
-            Runnable r = () -> worker1(id);
+            Runnable r = this::worker1;
             new Thread(r).start();
         }
         cdl1.await();
         assert new File("D:\\workspace\\MYDB\\target\\test\\pcacher_simple_test1.db").delete();
     }
 
-    private void worker1(int id) {
+    private void worker1() {
         for(int i = 0; i < 80; i ++) {
             int op = Math.abs(random.nextInt() % 20);
             if(op == 0) {
