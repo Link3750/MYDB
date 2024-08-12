@@ -17,7 +17,7 @@ import top.guoziyang.mydb.backend.parser.statement.Update;
 public class ParserTest {
     @Test
     public void testCreate() throws Exception {
-        String stat = "create table student id int32, name string, uid int64, (index name id uid);";
+        String stat = "create table student id int32, name string, uid int64, (index name id uid)";
         Object res = Parser.Parse(stat.getBytes());
         Create create = (Create)res;
         assert "student".equals(create.tableName);
@@ -31,7 +31,7 @@ public class ParserTest {
 
     @Test
     public void testBegin() throws Exception {
-        String stat = "begin isolation level read committed;";
+        String stat = "begin isolation level read committed";
         Object res = Parser.Parse(stat.getBytes());
         Begin begin = (Begin)res;
         assert !begin.isRepeatableRead;
@@ -62,7 +62,7 @@ public class ParserTest {
 
     @Test
     public void testInsert() throws Exception {
-        String stat = "insert into student values 5 \"Guo Ziyang\" 22;";
+        String stat = "insert into student values 5 \"Guo Ziyang\" 22";
         Object res = Parser.Parse(stat.getBytes());
         Insert insert = (Insert)res;
         Gson gson = new Gson();

@@ -78,11 +78,11 @@ public class Tokenizer {
             }
             popByte();
         }
-        byte b = peekByte();
+        Byte b = peekByte();
         if(isSymbol(b)) {
             popByte();
             return new String(new byte[]{b});
-        } else if(b == '"' || b == '\'') {
+        } else if(b != null && (b == '"' || b == '\'')) {
             return nextQuoteState();
         } else if(isAlphaBeta(b) || isDigit(b)) {
             return nextTokenState();
@@ -107,16 +107,16 @@ public class Tokenizer {
         }
     }
 
-    static boolean isDigit(byte b) {
+    static boolean isDigit(Byte b) {
         return (b >= '0' && b <= '9');
     }
 
-    static boolean isAlphaBeta(byte b) {
+    static boolean isAlphaBeta(Byte b) {
         return ((b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z'));
     }
 
     private String nextQuoteState() throws Exception {
-        byte quote = peekByte();
+        Byte quote = peekByte();
         popByte();
         StringBuilder sb = new StringBuilder();
         while(true) {
@@ -125,7 +125,7 @@ public class Tokenizer {
                 err = Error.InvalidCommandException;
                 throw err;
             }
-            if(b == quote) {
+            if(b.equals(quote)) {
                 popByte();
                 break;
             }
@@ -135,7 +135,7 @@ public class Tokenizer {
         return sb.toString();
     }
 
-    static boolean isSymbol(byte b) {
+    static boolean isSymbol(Byte b) {
         return (b == '>' || b == '<' || b == '=' || b == '*' ||
 		b == ',' || b == '(' || b == ')' || b == ';');
     }
