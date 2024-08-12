@@ -17,7 +17,7 @@ import top.guoziyang.mydb.backend.parser.statement.Update;
 public class ParserTest {
     @Test
     public void testCreate() throws Exception {
-        String stat = "create table student id int32, name string, uid int64, (index name id uid)";
+        String stat = "create table student id int32, name string, uid int64, (index name id uid);";
         Object res = Parser.Parse(stat.getBytes());
         Create create = (Create)res;
         assert "student".equals(create.tableName);
@@ -31,7 +31,7 @@ public class ParserTest {
 
     @Test
     public void testBegin() throws Exception {
-        String stat = "begin isolation level read committed";
+        String stat = "begin isolation level read committed;";
         Object res = Parser.Parse(stat.getBytes());
         Begin begin = (Begin)res;
         assert !begin.isRepeatableRead;
@@ -41,7 +41,7 @@ public class ParserTest {
         begin = (Begin)res;
         assert !begin.isRepeatableRead;
 
-        stat = "begin isolation level repeatable read";
+        stat = "begin isolation level repeatable read;";
         res = Parser.Parse(stat.getBytes());
         begin = (Begin)res;
         assert begin.isRepeatableRead;
@@ -49,7 +49,7 @@ public class ParserTest {
 
     @Test
     public void testRead() throws Exception {
-        String stat = "select name, id, strudeng from student where id > 1 and id < 4";
+        String stat = "select name, id, strudeng from student where id > 1 and id < 4;";
         Object res = Parser.Parse(stat.getBytes());
         Select select = (Select)res;
         assert "student".equals(select.tableName);
@@ -62,7 +62,7 @@ public class ParserTest {
 
     @Test
     public void testInsert() throws Exception {
-        String stat = "insert into student values 5 \"Guo Ziyang\" 22";
+        String stat = "insert into student values 5 \"Guo Ziyang\" 22;";
         Object res = Parser.Parse(stat.getBytes());
         Insert insert = (Insert)res;
         Gson gson = new Gson();
@@ -73,7 +73,7 @@ public class ParserTest {
 
     @Test
     public void testDelete() throws Exception {
-        String stat = "delete from student where name = \"Guo Ziyang\"";
+        String stat = "delete from student where name = \"Guo Ziyang\";";
         Object res = Parser.Parse(stat.getBytes());
         Delete delete = (Delete)res;
         Gson gson = new Gson();
@@ -95,7 +95,7 @@ public class ParserTest {
 
     @Test
     public void testUpdate() throws Exception {
-        String stat = "update student set name = \"GZY\" where id = 5";
+        String stat = "update student set name = \"GZY\" where id = 5;";
         Object res = Parser.Parse(stat.getBytes());
         Update update = (Update)res;
         Gson gson = new Gson();

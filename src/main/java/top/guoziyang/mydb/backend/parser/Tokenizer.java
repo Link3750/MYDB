@@ -92,7 +92,7 @@ public class Tokenizer {
         }
     }
 
-    private String nextTokenState() throws Exception {
+    private String nextTokenState() {
         StringBuilder sb = new StringBuilder();
         while(true) {
             Byte b = peekByte();
@@ -137,7 +137,7 @@ public class Tokenizer {
 
     static boolean isSymbol(byte b) {
         return (b == '>' || b == '<' || b == '=' || b == '*' ||
-		b == ',' || b == '(' || b == ')');
+		b == ',' || b == '(' || b == ')' || b == ';');
     }
 
     static boolean isBlank(byte b) {
