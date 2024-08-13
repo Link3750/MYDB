@@ -62,7 +62,7 @@ class HandleSocket implements Runnable {
     public void run() {
         InetSocketAddress address = (InetSocketAddress)socket.getRemoteSocketAddress();
         System.out.println("Establish connection: " + address.getAddress().getHostAddress()+":"+address.getPort());
-        Packager packager = null;
+        Packager packager;
         try {
             Transporter t = new Transporter(socket);
             Encoder e = new Encoder();
@@ -88,11 +88,14 @@ class HandleSocket implements Runnable {
             byte[] result = null;
             Exception e = null;
             try {
+                // 处理sql
                 result = exe.execute(sql);
             } catch (Exception e1) {
                 e = e1;
                 e.printStackTrace();
             }
+
+            // 将处理结果发送给客户端
             pkg = new Package(result, e);
             try {
                 packager.send(pkg);
