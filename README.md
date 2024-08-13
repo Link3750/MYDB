@@ -20,17 +20,20 @@ MYDB 是一个 Java 实现的简单的数据库，部分原理参照自 MySQL、
 ```shell
 mvn compile
 ```
-
-接着执行以下命令以 /tmp/mydb 作为路径创建数据库：
-
-```shell
-mvn exec:java -Dexec.mainClass="top.guoziyang.mydb.backend.Launcher" -Dexec.args="-create /tmp/mydb"
+本数据库根据`mydb.properties`读取配置文件，默认参数如下：
+``` properties
+## 数据库路径
+path= D:\\workspace\\MYDB\\tmp\\mydb
+## 端口号
+port=9999
+## 占用内存
+mem=128MB
 ```
 
 随后通过以下命令以默认参数启动数据库服务：
 
 ```shell
-mvn exec:java -Dexec.mainClass="top.guoziyang.mydb.backend.Launcher" -Dexec.args="-open /tmp/mydb"
+mvn exec:java -Dexec.mainClass="top.guoziyang.mydb.backend.Launcher"
 ```
 
 这时数据库服务就已经启动在本机的 9999 端口。重新启动一个终端，执行以下命令启动客户端连接数据库：

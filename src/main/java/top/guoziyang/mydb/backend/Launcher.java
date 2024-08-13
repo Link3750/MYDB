@@ -25,7 +25,6 @@ public class Launcher {
         PropertiesEntity propertiesEntity = new PropertiesEntity();
 
         openDB(propertiesEntity.getDBPath(), parseMem(propertiesEntity.getMem()), propertiesEntity.getPort());
-        System.out.println("Usage: launcher (open|create) DBPath");
     }
 
     private static void createDB(String path) {
