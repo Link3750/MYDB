@@ -11,9 +11,9 @@ import top.guoziyang.mydb.backend.dm.page.Page;
 
 public class MockPageCache implements PageCache {
 
-    private Map<Integer, MockPage> cache = new HashMap<>();
-    private Lock lock = new ReentrantLock();
-    private AtomicInteger noPages = new AtomicInteger(0);
+    private final Map<Integer, MockPage> cache = new HashMap<>();
+    private final Lock lock = new ReentrantLock();
+    private final AtomicInteger noPages = new AtomicInteger(0);
     
     @Override
     public int newPage(byte[] initData) {
@@ -29,7 +29,7 @@ public class MockPageCache implements PageCache {
     }
 
     @Override
-    public Page getPage(int pgno) throws Exception {
+    public Page getPage(int pgno) {
         lock.lock();
         try {
             return cache.get(pgno);

@@ -30,9 +30,7 @@ public class Visibility {
         if(tm.isCommitted(xmin)) {
             if(xmax == 0) return true;
             if(xmax != xid) {
-                if(!tm.isCommitted(xmax)) {
-                    return true;
-                }
+                return !tm.isCommitted(xmax);
             }
         }
         return false;
@@ -47,9 +45,7 @@ public class Visibility {
         if(tm.isCommitted(xmin) && xmin < xid && !t.isInSnapshot(xmin)) {
             if(xmax == 0) return true;
             if(xmax != xid) {
-                if(!tm.isCommitted(xmax) || xmax > xid || t.isInSnapshot(xmax)) {
-                    return true;
-                }
+                return !tm.isCommitted(xmax) || xmax > xid || t.isInSnapshot(xmax);
             }
         }
         return false;

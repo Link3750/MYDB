@@ -21,8 +21,8 @@ public class CacheTest {
         cache = new MockCache();
         cdl = new CountDownLatch(200);
         for(int i = 0; i < 200; i ++) {
-            Runnable r = () -> work();
-            new Thread(r).run();
+            Runnable r = this::work;
+            new Thread(r).start();
         }
         try {
             cdl.await();

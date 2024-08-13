@@ -18,7 +18,7 @@ public interface Logger {
     void rewind();
     void close();
 
-    public static Logger create(String path) {
+    static Logger create(String path) {
         File f = new File(path+LoggerImpl.LOG_SUFFIX);
         try {
             if(!f.createNewFile()) {
@@ -52,7 +52,7 @@ public interface Logger {
         return new LoggerImpl(raf, fc, 0);
     }
 
-    public static Logger open(String path) {
+    static Logger open(String path) {
         File f = new File(path+LoggerImpl.LOG_SUFFIX);
         if(!f.exists()) {
             Panic.panic(Error.FileNotExistsException);

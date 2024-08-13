@@ -16,11 +16,11 @@ import top.guoziyang.mydb.common.Error;
 
 /**
  * 日志文件读写
- * 
+ * <p>
  * 日志文件标准格式为：
  * [XChecksum] [Log1] [Log2] ... [LogN] [BadTail]
  * XChecksum 为后续所有日志计算的Checksum，int类型
- * 
+ * <p>
  * 每条正确日志的格式为：
  * [Size] [Checksum] [Data]
  * Size 4字节int 标识Data长度
@@ -36,9 +36,9 @@ public class LoggerImpl implements Logger {
     
     public static final String LOG_SUFFIX = ".log";
 
-    private RandomAccessFile file;
-    private FileChannel fc;
-    private Lock lock;
+    private final RandomAccessFile file;
+    private final FileChannel fc;
+    private final Lock lock;
 
     private long position;  // 当前日志指针的位置
     private long fileSize;  // 初始化时记录，log操作不更新

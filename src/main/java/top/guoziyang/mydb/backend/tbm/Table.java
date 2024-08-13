@@ -8,12 +8,7 @@ import java.util.Map;
 
 import com.google.common.primitives.Bytes;
 
-import top.guoziyang.mydb.backend.parser.statement.Create;
-import top.guoziyang.mydb.backend.parser.statement.Delete;
-import top.guoziyang.mydb.backend.parser.statement.Insert;
-import top.guoziyang.mydb.backend.parser.statement.Select;
-import top.guoziyang.mydb.backend.parser.statement.Update;
-import top.guoziyang.mydb.backend.parser.statement.Where;
+import top.guoziyang.mydb.backend.parser.statement.*;
 import top.guoziyang.mydb.backend.tbm.Field.ParseValueRes;
 import top.guoziyang.mydb.backend.tm.TransactionManagerImpl;
 import top.guoziyang.mydb.backend.utils.Panic;
@@ -31,7 +26,6 @@ public class Table {
     TableManager tbm;
     long uid;
     String name;
-    byte status;
     long nextUid;
     List<Field> fields = new ArrayList<>();
 
@@ -197,7 +191,6 @@ public class Table {
                     break;
                 }
             }
-            l0 = 0;
             r0 = Long.MAX_VALUE;
             single = true;
         } else {
@@ -226,7 +219,7 @@ public class Table {
         return uids;
     }
 
-    class CalWhereRes {
+    static class CalWhereRes {
         long l0, r0, l1, r1;
         boolean single;
     }

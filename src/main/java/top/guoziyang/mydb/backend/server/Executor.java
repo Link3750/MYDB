@@ -33,29 +33,34 @@ public class Executor {
     public byte[] execute(byte[] sql) throws Exception {
         System.out.println("Execute: " + new String(sql));
         Object stat = Parser.Parse(sql);
-        if(Begin.class.isInstance(stat)) {
-            if(xid != 0) {
-                throw Error.NestedTransactionException;
+        switch (stat) {
+            case Begin begin -> {
+                if (xid != 0) {
+                    throw Error.NestedTransactionException;
+                }
+                BeginRes r = tbm.begin(begin);
+                xid = r.xid;
+                return r.result;
             }
-            BeginRes r = tbm.begin((Begin)stat);
-            xid = r.xid;
-            return r.result;
-        } else if(Commit.class.isInstance(stat)) {
-            if(xid == 0) {
-                throw Error.NoTransactionException;
+            case Commit ignored -> {
+                if (xid == 0) {
+                    throw Error.NoTransactionException;
+                }
+                byte[] res = tbm.commit(xid);
+                xid = 0;
+                return res;
             }
-            byte[] res = tbm.commit(xid);
-            xid = 0;
-            return res;
-        } else if(Abort.class.isInstance(stat)) {
-            if(xid == 0) {
-                throw Error.NoTransactionException;
+            case Abort ignored -> {
+                if (xid == 0) {
+                    throw Error.NoTransactionException;
+                }
+                byte[] res = tbm.abort(xid);
+                xid = 0;
+                return res;
             }
-            byte[] res = tbm.abort(xid);
-            xid = 0;
-            return res;
-        } else {
-            return execute2(stat);
+            case null, default -> {
+                return execute2(stat);
+            }
         }
     }
 
@@ -69,17 +74,17 @@ public class Executor {
         }
         try {
             byte[] res = null;
-            if(Show.class.isInstance(stat)) {
+            if(stat instanceof Show) {
                 res = tbm.show(xid);
-            } else if(Create.class.isInstance(stat)) {
+            } else if(stat instanceof Create) {
                 res = tbm.create(xid, (Create)stat);
-            } else if(Select.class.isInstance(stat)) {
+            } else if(stat instanceof Select) {
                 res = tbm.read(xid, (Select)stat);
-            } else if(Insert.class.isInstance(stat)) {
+            } else if(stat instanceof Insert) {
                 res = tbm.insert(xid, (Insert)stat);
-            } else if(Delete.class.isInstance(stat)) {
+            } else if(stat instanceof Delete) {
                 res = tbm.delete(xid, (Delete)stat);
-            } else if(Update.class.isInstance(stat)) {
+            } else if(stat instanceof Update) {
                 res = tbm.update(xid, (Update)stat);
             }
             return res;
